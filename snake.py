@@ -50,6 +50,8 @@ DOWN_EDGE=-250
 RIGHT_EDGE=400
 LEFT_EDGE=-400
 
+
+
 def up():
     global direction
     direction=UP
@@ -79,17 +81,18 @@ turtle.listen()
 turtle.register_shape("trash.gif")
 food=turtle.clone()
 food.shape("trash.gif")
-
+food.hideturtle()
 def make_food():
     min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
     max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
     food_x=random.randint(min_x,max_x)*SQUARE_SIZE
     food_y=random.randint(min_y,max_y)*SQUARE_SIZE
     food.goto(food_x,food_y)
     food_pos.append(food.pos())
-    food_stamps.append(food.stamp())
+    new_food = food.stamp()
+    food_stamps.append(new_food)
     
 def move_snake():
     my_pos=snake.pos()
@@ -123,6 +126,8 @@ def move_snake():
         food_pos.pop(food_ind)
         food_stamps.pop(food_ind)
         print('you have eaten the food!')
+        turtle
+        make_food()
         
     old_stamp=stamp_list.pop(0)
     snake.clearstamp(old_stamp)
@@ -142,23 +147,28 @@ def move_snake():
     elif new_y_pos >=UP_EDGE:
         print('you hit the up edge! game over!')
         quit()
-   
+    
+    if snake.pos() in pos_list[0:-1]:
+        quit()
     turtle.ontimer(move_snake,TIME_STEP)
+
+        
+    
 move_snake()
 make_food()
-turtle.register_shape("trash.gif")
-food=turtle.clone()
-food.shape("trash.gif")
-
-food_pos=[(100,100),(-100,100),(-100,-100),(100,-100)]
-food_stamps=[]
-food.hideturtle()
-
-turtle.pendown()
-for this_food_pos in food_pos:
-    food.goto(this_food_pos)
-    food_stamp = food.stamp()
-    food_stamps.append(food_stamp)
+##turtle.register_shape("trash.gif")
+##food=turtle.clone()
+##food.shape("trash.gif")
+##
+##food_pos=[(100,100),(-100,100),(-100,-100),(100,-100)]
+##food_stamps=[]
+##food.hideturtle()
+##
+##turtle.pendown()
+##for this_food_pos in food_pos:
+##    food.goto(this_food_pos)
+##    food_stamp = food.stamp()
+##    food_stamps.append(food_stamp)
     
     
     
