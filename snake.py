@@ -1,5 +1,6 @@
 import turtle
 import random
+import time
 
 turtle.tracer(1,0)
 
@@ -17,7 +18,8 @@ pos_list=[]
 stamp_list=[]
 food_pos=[]
 food_stamps=[]
-
+score=0
+score_list=[]
 snake=turtle.clone()
 snake.shape("square")
 
@@ -65,22 +67,26 @@ box.goto(-350,-200)
 box.goto(-350,200)
 def up():
     global direction
-    direction=UP
+    if direction!=DOWN:
+        direction=UP
     print('you pressed the UP key!')
 
 def left():
     global direction
-    direction=LEFT
+    if direction!=RIGHT:
+        direction=LEFT
     print('you pressed the LEFT key!')
 
 def down():
     global direction
-    direction=DOWN
+    if direction!=UP:
+        direction=DOWN
     print('you pressed the DOWN key!')
 
 def right():
     global direction
-    direction=RIGHT
+    if direction!=LEFT:     
+        direction=RIGHT
     print('you pressed the RIGHT key!')
 
 turtle.onkeypress(up,UP_ARROW)
@@ -104,8 +110,14 @@ def make_food():
     food_pos.append(food.pos())
     new_food = food.stamp()
     food_stamps.append(new_food)
-    
+num=turtle.clone()
+
+def score_sleep():
+    global num
+    time.sleep(3)
+    num.clear()
 def move_snake():
+    global score , score_list
     my_pos=snake.pos()
     x_pos=my_pos[0]
     y_pos=my_pos[1]
@@ -122,8 +134,7 @@ def move_snake():
     elif direction==DOWN:
         snake.goto(x_pos,y_pos-SQUARE_SIZE)
         print('you moved down')
-    else:
-        print('?')
+
 
     my_pos=snake.pos()
     pos_list.append(my_pos)
@@ -132,6 +143,7 @@ def move_snake():
     #special place for part 5
     
     if snake.pos() in food_pos:
+        global num
         food_ind=food_pos.index(snake.pos())
         food.clearstamp(food_stamps[food_ind])
         food_pos.pop(food_ind)
@@ -139,8 +151,12 @@ def move_snake():
         print('you have eaten the food!')
         make_food()
         make_food()
-        
-        
+        num.clear()
+        score = score + 1
+        score_list.append(score)
+        num.goto(-350,200)
+        num.write(score,font=("Arial",18, "normal"))
+        #score_sleep()
     else:
         old_stamp=stamp_list.pop(0)
         snake.clearstamp(old_stamp)
@@ -150,15 +166,27 @@ def move_snake():
     new_y_pos=new_pos[1]
     if new_x_pos >=RIGHT_EDGE:
         print('you hit the right edge! game over!')
+        turtle.write("you hit the right edge! game over!",align="center",font=("Arial",18, "normal"))
+        import time
+        time.sleep(1) 
         quit()
     elif new_x_pos <=LEFT_EDGE:
         print('you hit the left edge! game over!')
+        turtle.write("you hit the left edge! game over!",align="center",font=("Arial",18, "normal"))
+        import time
+        time.sleep(1)
         quit()
     elif new_y_pos <=DOWN_EDGE:
         print('you hit the down edge! game over!')
+        turtle.write("you hit the down edge! game over!",align="center",font=("Arial",18, "normal"))
+        import time
+        time.sleep(1) 
         quit()
     elif new_y_pos >=UP_EDGE:
         print('you hit the up edge! game over!')
+        turtle.write("you hit the up edge! game over!",align="center",font=("Arial",18, "normal"))
+        import time
+        time.sleep(1) 
         quit()
     
     if snake.pos() in pos_list[0:-1]:
@@ -170,9 +198,7 @@ def move_snake():
 move_snake()
 make_food()
 
-num=turtle.clone()
-num.goto(-350,200)
-num.write("5",font=("Arial",18, "normal"))
+
 ##turtle.register_shape("trash.gif")
 ##food=turtle.clone()
 ##food.shape("trash.gif")
